@@ -57,7 +57,7 @@ const SwipeableCard = ({ item, isExpanded, onExpand, onDelete, setSwipeableRef }
                             <>
                                 <Text style={styles.description}>{item.description}</Text>
                                 <View style={styles.actions}>
-                                    <Text style={styles.actionText}>✨ Edit your task and make it shine!</Text>
+                                    <Text style={styles.actionText}>“Here's a quick breakdown of what needs your attention today. Stay sharp!”</Text>
                                 </View>
                             </>
                         )}
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     actions: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
         paddingHorizontal: 20,
     },
     actionText: {
