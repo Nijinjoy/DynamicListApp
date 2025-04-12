@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import SwipeableCard from '../components/ SwipeableCard';
 import { initialData } from '../utils/data';
+import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 
 const HomeScreen = () => {
     const [data, setData] = useState(initialData);
@@ -44,13 +45,13 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
+            <ExpoStatusBar style="light" backgroundColor="transparent" />
             <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.header}>
                 <View style={styles.headerContent}>
                     <View>
-                        <Text style={styles.title}>My Tasks</Text>
-                        <Text style={styles.subtitle}>Swipe to delete • Tap to expand</Text>
+                        <Text style={styles.title}>Welcome to Your Tasks!</Text>
+                        <Text style={styles.subtitle}> Organize and track your tasks in style</Text>
                     </View>
-                    <Ionicons name="add-circle-outline" size={30} color="#fff" />
                 </View>
             </LinearGradient>
 
@@ -77,7 +78,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#f5f6fa',
     },
     header: {
         paddingHorizontal: 20,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 26,
+        fontSize: 22,
         fontWeight: 'bold',
         color: '#ffffff',
     },

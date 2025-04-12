@@ -1,9 +1,19 @@
-import React, { useRef } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 
 const SwipeableCard = ({ item, isExpanded, onExpand, onDelete, setSwipeableRef }) => {
     const swipeRef = useRef(null);
+
+    const [animation] = useState(new Animated.Value(0));
+
+    useEffect(() => {
+        Animated.timing(animation, {
+            toValue: isExpanded ? 0.5 : 0,
+            duration: 300,
+            useNativeDriver: false,
+        }).start();
+    }, [isExpanded]);
 
     const renderRightActions = () => (
         <View style={styles.rightActionWrapper}>
@@ -32,20 +42,26 @@ const SwipeableCard = ({ item, isExpanded, onExpand, onDelete, setSwipeableRef }
                 >
                     <Text style={styles.title}>{item.title}</Text>
 
-                    {isExpanded && (
-                        <View style={styles.hiddenContent}>
-                            <Text style={styles.description}>{item.description}</Text>
-                            <Text style={styles.dateText}>Created: {item.date}</Text>
-                            <View style={styles.actions}>
-                                <TouchableOpacity style={styles.actionButton}>
-                                    <Text style={styles.actionText}>Edit</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.actionButton}>
-                                    <Text style={styles.actionText}>Share</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )}
+                    <Animated.View
+                        style={[
+                            styles.hiddenContent,
+                            {
+                                height: animation.interpolate({
+                                    inputRange: [0, 1], // The animated value from 0 to 1
+                                    outputRange: [0, 200], // The height range from 0 (collapsed) to 200 (expanded)
+                                }),
+                            },
+                        ]}
+                    >
+                        {isExpanded && (
+                            <>
+                                <Text style={styles.description}>{item.description}</Text>
+                                <View style={styles.actions}>
+                                    <Text style={styles.actionText}>✨ Edit your task and make it shine!</Text>
+                                </View>
+                            </>
+                        )}
+                    </Animated.View>
                 </TouchableOpacity>
             </Swipeable>
         </View>
@@ -61,7 +77,6 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#fdfdfd',
         padding: 16,
-        borderRadius: 12,
         elevation: 4,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -79,31 +94,28 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     hiddenContent: {
-        marginTop: 10,
+        overflow: 'hidden', // Hide any overflow when the card is collapsed
+        // marginTop: 10,
     },
     description: {
         fontSize: 15,
         color: '#555',
         marginBottom: 5,
     },
-    dateText: {
-        fontSize: 13,
-        color: '#888',
-        marginBottom: 10,
-    },
     actions: {
         flexDirection: 'row',
-        gap: 10,
-    },
-    actionButton: {
-        backgroundColor: '#4CAF50',
-        paddingVertical: 6,
-        paddingHorizontal: 14,
-        borderRadius: 6,
+        justifyContent: 'space-between',
+        marginTop: 20,
+        paddingHorizontal: 20,
     },
     actionText: {
-        color: '#fff',
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#43cea2',
+        textTransform: 'capitalize',
+        letterSpacing: 0.8,
+        borderBottomWidth: 2,
+        borderBottomColor: '#43cea2',
     },
     rightActionWrapper: {
         justifyContent: 'center',
@@ -114,7 +126,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 100,
         height: '95%',
-        borderRadius: 10,
     },
     deleteText: {
         color: '#fff',
